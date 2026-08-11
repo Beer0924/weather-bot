@@ -29,17 +29,20 @@ async function main() {
       const res = await fetch(url);
       const data = await res.json();
       const tom = data.daily;
+      
+      // Index 1 代表明日預報
       const cond = getWeatherText(tom.weather_code[1]);
       const minT = Math.round(tom.temperature_2m_min[1]);
       const maxT = Math.round(tom.temperature_2m_max[1]);
       const pop = tom.precipitation_probability_max[1] ?? 0;
+      
       result[city] = `${cond} ${minT}°C ~ ${maxT}°C (降雨機率 ${pop}%)`;
     } catch (e) {
       result[city] = '天氣資料更新中';
     }
   }
   fs.writeFileSync('weather.json', JSON.stringify(result, null, 2), 'utf-8');
-  console.log('weather.json updated successfully!');
+  console.log('weather.json updated with tomorrow forecast!');
 }
 
 main();
